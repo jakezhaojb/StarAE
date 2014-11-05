@@ -67,14 +67,37 @@ def de_vectorize(vec, n, sizes):
 
     return T
 
+# Activation functions and their gradients.
+################################################################
+
 
 def sigmoid(x):
+    """sigmoid function
+
+    Parameters
+    ----------
+    x : np.array
+
+    Returns
+    -------
+    y : np.array, shape = x.shape
+    """
     assert isinstance(x, np.ndarray)
     y = 1.0 / (1 + np.exp(-x))
     return y
 
 
 def rec_linear(x):
+    """rectified function
+
+    Parameters
+    ----------
+    x : np.array
+
+    Returns
+    -------
+    y : np.array, shape = x.shape
+    """
     assert isinstance(x, np.ndarray)
     y = x.copy()
     y[y < 0] = 0
@@ -82,12 +105,32 @@ def rec_linear(x):
 
 
 def tanh(x):
+    """Hyperbolic tangent function
+
+    Parameters
+    ----------
+    x : np.array
+
+    Returns
+    -------
+    y : np.array, shape = x.shape
+    """
     assert isinstance(x, np.ndarray)
     y = (np.exp(x) - np.exp(-x)) / (np.exp(x) + np.exp(-x))
     return y
 
 
 def sigmoid_grad(x):
+    """gradient of sigmoid function
+
+    Parameters
+    ----------
+    x : np.array
+
+    Returns
+    -------
+    g : np.array, shape = x.shape
+    """
     assert isinstance(x, np.ndarray)
     y = sigmoid(x)
     g = (1 - y) * y
@@ -95,6 +138,16 @@ def sigmoid_grad(x):
 
 
 def rec_linear_grad(x):
+    """gradient of rectified linear function
+
+    Parameters
+    ----------
+    x : np.array
+
+    Returns
+    -------
+    g : np.array, shape = x.shape
+    """
     assert isinstance(x, np.ndarray)
     g = np.zeros(shape=x.shape)
     g[x > 0] = 1
@@ -102,6 +155,16 @@ def rec_linear_grad(x):
 
 
 def tanh_grad(x):
+    """gradient of tanh function
+
+    Parameters
+    ----------
+    x : np.array
+
+    Returns
+    -------
+    g : np.array, shape = x.shape
+    """
     assert isinstance(x, np.ndarray)
     g = 1 - np.power(tanh(x))
     return g
