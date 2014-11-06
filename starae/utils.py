@@ -2,6 +2,8 @@
 # Author: Junbo Zhao
 
 from __future__ import division
+import os
+import sys
 import numpy as np
 
 
@@ -120,6 +122,34 @@ def tanh(x):
     return y
 
 
+def activate(X, function='sigmoid'):
+    """Wrapper for activation function
+
+    Parameters
+    ----------
+    X : np.array
+    Input
+
+    function : string, default = 'sigmoid'
+    The name of activation function: 'sigmoid', 'rec_linear' or 'tanh'.
+
+    Returns
+    -------
+    Y : np.array
+    Values being activated.
+    """
+    assert isinstance(X, np.ndarray)
+    if function == 'sigmoid':
+        return sigmoid(X)
+    elif function == 'rec_linear':
+        return rec_linear(X)
+    elif function == 'tanh':
+        return tanh(X)
+    else:
+        print "The activation function is not supported."
+        sys.exit(1)
+
+
 def sigmoid_grad(x):
     """gradient of sigmoid function
 
@@ -168,3 +198,88 @@ def tanh_grad(x):
     assert isinstance(x, np.ndarray)
     g = 1 - np.power(tanh(x))
     return g
+
+
+def activate_grad(X, function='sigmoid'):
+    """Wrapper for gradient of activation function
+
+    Parameters
+    ----------
+    X : np.array
+    Input
+
+    function : string, default = 'sigmoid'
+    The name of activation function: 'sigmoid', 'rec_linear' or 'tanh'.
+
+    Returns
+    -------
+    Y : np.array
+    Gradient with respect to weights.
+    """
+    assert isinstance(X, np.ndarray)
+    if function == 'sigmoid':
+        return sigmoid_grad(X)
+    elif function == 'rec_linear':
+        return rec_linear_grad(X)
+    elif function == 'tanh':
+        return tanh_grad(X)
+    else:
+        print "The activation function is not supported."
+        sys.exit(1)
+
+
+def write_to_file(x, file_name, suffix='csv', delim=','):
+    """Write array or matrix to a file
+
+    Parameter
+    ---------
+    x : np.array or np.matrix
+    matrices or arrays to save to file
+
+    file_name : string
+    The name of the file given
+
+    suffix : string, default = 'csv'
+    The extension of file_name
+
+    delim : string, default = ','
+    The string used to separate values
+
+    Returns
+    -------
+    Null
+    """
+    assert isinstance(x, np.ndarray)
+    file_name = file_name + '.' + suffix
+    if os.path.isfile(file_name):
+        while 1:
+            print 'Are you sure to overwrite', file_name, '[Y/n]?'
+            key = raw_input()
+            if key == 'Y':
+                break
+            elif key == 'n':
+                print 'Overwrite denied.'
+                return
+            else:
+                continue
+    np.savetxt(file_name, x, delimiter=delim)
+
+
+def load_from_file(file_name, delim=','):
+    """Load data from a file
+
+    Parameter
+    ---------
+    file_name: string
+    File to be loaded
+
+    delim : string, default = ','
+    The string used to separate values
+
+    Returns
+    -------
+    x : np.array
+    """
+    assert os.path.isfile(file_name)
+    x = np.loadtxt(file_name, delimiter=delim)
+    return x

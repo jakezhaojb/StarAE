@@ -5,35 +5,29 @@
 Generalized Neural Nets
 """
 
-from __future__ import division
-from abc import abstractmethod
-import numpy as np
-from scipy import sparse
-from dpark import DparkContext
-
-from .optim import sgd, bfgs
-from .utils import *
+from abc import ABCMeta, abstractmethod
 
 
 class NeuralNetBase(object):
     """Base class for Neural Nets"""
+    __metaclass__ = ABCMeta
 
     @abstractmethod
-    def init_param(self, layer_num, layer_size):
+    def init_param(self):
         """Initiate Neural Nets"""
 
-
-    def feed_forward(self, acti_fun='sigmoid'):
+    @abstractmethod
+    def feed_forward(self, X, acti_fun='sigmoid'):
         """Neural Net feed forward"""
 
-    
+    @abstractmethod
     def compute_cost(self):
         """Neural Net lost function"""
 
-    
+    @abstractmethod
     def compute_grad(self):
         """Back-propagation application"""
 
-
+    @abstractmethod
     def optimize(self):
         """Optimization inteface"""
