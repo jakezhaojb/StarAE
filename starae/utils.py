@@ -6,6 +6,9 @@ import os
 import sys
 import numpy as np
 
+__all__ = ['vectorize', 'de_vectorize', 'activate', 'activate_grad',
+           'write_to_file', 'load_from_file']
+
 
 def vectorize(*args):  # TODO efficiency of hstack
     """Vectorize parameters, to speed up.
