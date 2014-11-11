@@ -17,7 +17,7 @@ class AutoEncoder(NeuralNetBase):
     # TODO OPT paras completion
     def __init__(self, input_size, hidden_size, activate_fun='sigmoid',
                  optimize_method='sgd', max_iter=1000, tol=1.e-3, alpha=0.1,
-                 mini_batch=0, adastep=True, momentum=True, beta=0.95,
+                 mini_batch=0, adastep=True, momentum=True, momen_beta=0.95,
                  dpark_enable='False', dpark_run='process',
                  dpark_threads='-p 4', debug='False'):
         # safegruard code TODO
@@ -31,7 +31,7 @@ class AutoEncoder(NeuralNetBase):
         self.mini_batch = mini_batch
         self.adastep = adastep
         self.momentum = momentum
-        self.beta = beta
+        self.momen_beta = momen_beta
         self.dpark_enable = dpark_enable
         self.dpark_run = daprk_run
         self.dpark_threads = dpark_threads
@@ -58,14 +58,14 @@ class AutoEncoder(NeuralNetBase):
         # TODO is it a good strategy to record everything here?
         # TODO is this a good strategy to record things?
         # TODO efficiency
-        shapes = ((self.hidden_size, self.input_size),
-                  (self.input_size, self.hidden_size),
-                  (self.hidden_size, ), (self.input_size, ))
-        w1, w2, b1, b2 = de_vectorize(self.theta, 4, shapes)
+        s = ((self.hidden_size, self.input_size),
+             (self.input_size, self.hidden_size),
+             (self.hidden_size, ), (self.input_size, ))
+        self.w1, self.w2, self.b1, self.b2 = de_vectorize(self.theta, 4, s)
         self.ipt = X
-        self.z2 = np.dot(w1, X) + b1
+        self.z2 = np.dot(self.w1, X) + self.b1
         self.a2 = activate(self.z2, self.acti_fun)
-        self.z3 = np.dot(w2, self.a2) + b2
+        self.z3 = np.dot(self.w2, self.a2) + self.b2
         self.a3 = activate(self.z3, self.acti_fun)
         self.opt = self.a3
 
@@ -87,11 +87,12 @@ class AutoEncoder(NeuralNetBase):
                               self.compute_grad, args=(),
                               maxiter=self.max_iter, tol=self.tol)
         elif self.optimize_method == 'sgd':
-            self.theta = bfgs(self.compute_cost, X, self.theta,
+            self.theta = sgd(self.compute_cost, X, self.theta,
                               self.compute_grad, args=(), alpha=0.1,
                               maxiter=self.max_iter, tol=self.tol,
                               mini_batch=self.mini_batch,
-                              momentum=self.momentum, beta=self.beta,
+                              momentum=self.momentum,
+                              momen_beta=self.momen_beta,
                               adastep=self.adastep)
         else:
             print "The optimization method is not supported."
