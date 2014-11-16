@@ -37,7 +37,7 @@ class SparseAE(AutoEncoder):
             print 'Dpark enabled.'
         else:
             # Vectorized solution
-            feed_forward(self, X)
+            self.feed_forward(X)
             rho_ = np.sum(self.a2, axis=1).reshape(self.a2.shape[0], 1)
             cost += np.linalg.norm(self.a3 - self.ipt)
             cost, rho_ = cost / X.shape[1], rho_ / X.shape[1]
@@ -49,3 +49,26 @@ class SparseAE(AutoEncoder):
             cost += self.lamb / 2 * (np.linalg.norm(self.w1) ** 2 +
                                      np.linalg.norm(self.w2) ** 2)
         return cost
+
+    def compute_grad(self, X, theta=self.theta):
+        """Back-propagation on SparseAE"""
+        self.feed_forward(X)
+        rho_ = np.sum(self.a2, axis=1).reshape(self.a2.shape[0], 1)
+        sigma3 = -(self.a1 - self.a3) * (self.a3 * (1 - self.a3))
+        sparse_sigma = -(self.rho / rho_) + (1 - self.rho) / (1 - rho_)
+        sigma2 = (np.dot(self.w2.T, sigma3) + self.sparse_beta * sparse_sigma)\
+            * (self.a2 * (1 - self.a2))
+        # Desired gradients
+        w2_grad = np.dot(sigma3, self.a2.T)
+        b2_grad = np.sum(sigma3, axis=1).reshape(self.input_size, 1)
+        w1_grad = np.dot(sigma2, self.a1.T)
+        b1_grad = np.sum(sigma2, axis=1).reshape(self.hidden_size, 1)
+        # average and weight decay
+        w2_grad = w2_grad / X.shape[1] + self.lamb * self.w2
+        b2_grad = b2_grad / X.shape[1]
+        w1_grad = w1_grad / X.shape[1] + self.lamb * self.w1
+        b1_grad = b1_grad / X.shape[1]
+        # vectorize
+        theta_grad = vectorize(w1_grad, w2_grad, b1_grad, b2_grad)
+        # TODO check it!!
+        return theta_grad  # vector
