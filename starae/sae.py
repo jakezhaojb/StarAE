@@ -31,6 +31,9 @@ class SparseAE(AutoEncoder):
         # safeguard
         assert isinstance(X, np.ndarray)
         assert X.shape[0] == self.input_size
+        assert self.theta.shape == theta.shape
+        self.theta = theta  # Update
+        # Start go forward
         cost = 0
         if self.dpark_enable:
             # TODO
@@ -52,6 +55,12 @@ class SparseAE(AutoEncoder):
 
     def compute_grad(self, X, theta=self.theta):
         """Back-propagation on SparseAE"""
+        # safeguard
+        assert isinstance(X, np.ndarray)
+        assert X.shape[0] == self.input_size
+        assert self.theta.shape == theta.shape
+        self.theta = theta  # Update
+        # Start iterate
         self.feed_forward(X)
         rho_ = np.sum(self.a2, axis=1).reshape(self.a2.shape[0], 1)
         sigma3 = -(self.a1 - self.a3) * (self.a3 * (1 - self.a3))
@@ -59,9 +68,11 @@ class SparseAE(AutoEncoder):
         sigma2 = (np.dot(self.w2.T, sigma3) + self.sparse_beta * sparse_sigma)\
             * (self.a2 * (1 - self.a2))
         # Desired gradients
-        w2_grad = np.dot(sigma3, self.a2.T)
+        w2_grad = np.sum(np.dot(sigma3, self.a2.T), axis=1).\
+                         reshape(self.hidden_size, 1)
         b2_grad = np.sum(sigma3, axis=1).reshape(self.input_size, 1)
-        w1_grad = np.dot(sigma2, self.a1.T)
+        w1_grad = np.sum(np.dot(sigma2, self.a1.T), axis=1).\
+                         reshape(self.input_size, 1)
         b1_grad = np.sum(sigma2, axis=1).reshape(self.hidden_size, 1)
         # average and weight decay
         w2_grad = w2_grad / X.shape[1] + self.lamb * self.w2
@@ -70,5 +81,4 @@ class SparseAE(AutoEncoder):
         b1_grad = b1_grad / X.shape[1]
         # vectorize
         theta_grad = vectorize(w1_grad, w2_grad, b1_grad, b2_grad)
-        # TODO check it!!
         return theta_grad  # vector
