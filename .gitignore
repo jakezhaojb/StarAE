@@ -9,3 +9,6 @@
 
 # Vim extensions
 *.swp
+
+# Dataset
+visualize/data
