@@ -1,0 +1,6 @@
+SAE:
+1. compute_cost and compute_grad, acti_functions.
+2. Optimization test.
+3. Visualization
+4. Complete docstring
+5. Complete 'verbose' mode, printing more information.

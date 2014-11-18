@@ -1,2 +1,11 @@
+# python extensions
 *.py[cod]
+
+# C++ extensions
 *.so
+
+# python-mode plugin
+*.ropeprojec*
+
+# Vim extensions
+*.swp
