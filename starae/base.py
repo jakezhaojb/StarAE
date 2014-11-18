@@ -28,6 +28,8 @@ class NeuralNetBase(object):
     def compute_grad(self):
         """Back-propagation application"""
 
+    '''
     @abstractmethod
     def optimize(self):
         """Optimization inteface"""
+    '''

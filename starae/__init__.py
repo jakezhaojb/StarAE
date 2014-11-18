@@ -1,3 +1,3 @@
-from . import ae, cae, dae, mdae 
+from .sae import SparseAE
 
-__all__ = ['ae', 'cae', 'dae', 'mdae']
+__all__ = ['SparseAE']

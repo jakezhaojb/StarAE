@@ -6,29 +6,30 @@ from __future__ import division
 import numpy as np
 from math import ceil
 from scipy import optimize
-from inspect import isfunction
+from inspect import ismethod
 
 
-def bfgs(compute_cost, X, init_guess, compute_grad, args=(),
+def bfgs(compute_cost, init_guess, X, compute_grad, args=(),
          maxiter=1000, tol=1.e-3):
     """BFGS revoke"""
     # TODO Notice: input data should be put in args
-    assert isfunction(compute_cost)
-    assert isfunction(compute_grad)
+    assert ismethod(compute_cost)
+    assert ismethod(compute_grad)
     assert isinstance(init_guess, np.ndarray)
 
-    args = (X, init_guess, ) + args
+    args = (X, ) + args
     # TODO bad naming
-    return optimize.fmin_l_bfgs_b(compute_cost, init_guess, compute_grad,
+    opt_bfgs = optimize.fmin_l_bfgs_b(compute_cost, init_guess, compute_grad,
                                   args=args, maxiter=maxiter, pgtol=tol)
+    return opt_bfgs[0]
 
 
-def sgd(compute_cost, X, init_guess, compute_grad, args=(),
+def sgd(compute_cost, init_guess, X, compute_grad, args=(),
         alpha=0.1, maxiter=1000, tol=1.e-3, mini_batch=0,
         momentum=False, beta=0.95, adastep=False):
     """Stochastic Gradient Descent"""
-    assert isfunction(compute_cost)
-    assert isfunction(compute_grad)
+    assert ismethod(compute_cost)
+    assert ismethod(compute_grad)
     assert isinstance(init_guess, np.ndarray)
 
     theta = init_guess
@@ -44,9 +45,9 @@ def sgd(compute_cost, X, init_guess, compute_grad, args=(),
         momen = np.zeros(shape=init_guess.shape)
         # inner-loop
         for iloop in mini_batch_idx:
-            _args = (X, theta, ) + args
+            _args = (theta, X, ) + args
             iter_cost = compute_cost(*_args)
-            _args = (X[:, iloop], theta, ) + args
+            _args = (theta, X[:, iloop], ) + args
             iter_grad = compute_grad(*_args)
             # adastep
             if adastep:
@@ -62,12 +63,13 @@ def sgd(compute_cost, X, init_guess, compute_grad, args=(),
                 momen = -iter_grad
             # go downhill
             theta += momen * step_size
-        print 'iter: %f, expirical loss: %f' % (oloop, iter_cost)
+        print 'iter: %d, expirical loss: %f' % (oloop, iter_cost)
         # check tolerance
-        if np.linalg.norm(iter_grad):  # TODO some better criterion?
+        if np.linalg.norm(iter_grad) < tol:  # TODO some better criterion?
             break
-        # TODO some tricks of SGD??
-        return theta
+
+    # TODO some tricks of SGD??
+    return theta
 
 
 def split_list(x, sec):

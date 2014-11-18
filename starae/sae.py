@@ -11,22 +11,38 @@ from .ae import AutoEncoder
 
 class SparseAE(AutoEncoder):
     """docstring for SparseAE"""
-    def __init__(self, input_size, hidden_size, activate_fun='sigmoid',
+    def __init__(self, input_size, hidden_size, acti_fun='sigmoid',
                  optimize_method='sgd', max_iter=1000, tol=1.e-3, alpha=0.1,
                  mini_batch=0, adastep=True, momentum=True, momen_beta=0.95,
                  dpark_enable='False', dpark_run='process',
                  dpark_threads='-p 4', debug='False', lamb=0.0001,
-                 rho=0.01, sparse_beta=3):
-        super(SparseAE, self).__init__(input_size, hidden_size, activate_fun,
-                                       optimize_method, max_iter, tol, alpha,
-                                       mini_batch, adastep, momentum,
-                                       momen_beta, dpark_enable, dpark_run,
-                                       dpark_threads, debug)
+                 rho=0.001, sparse_beta=3, verbose=False):
+        super(SparseAE, self).__init__(input_size=input_size,
+                                       hidden_size=hidden_size,
+                                       acti_fun=acti_fun,
+                                       optimize_method=optimize_method,
+                                       max_iter=max_iter,
+                                       tol=tol, alpha=alpha,
+                                       mini_batch=mini_batch,
+                                       adastep=adastep,
+                                       momentum=momentum,
+                                       momen_beta=momen_beta,
+                                       dpark_enable=dpark_enable,
+                                       dpark_run=dpark_run,
+                                       dpark_threads=dpark_threads,
+                                       debug=debug, verbose=verbose)
+        super(SparseAE, self).init_param()
         self.lamb = lamb
         self.rho = rho
         self.sparse_beta = sparse_beta
+        # Debug mode, when needed.
+        '''
+        if self.debug:
+            self.sparse_beta = 0
+            self.lamb = 0
+        '''
 
-    def compute_cost(self, X, theta=self.theta):
+    def compute_cost(self, theta, X):
         """SparseAE lost function"""
         # safeguard
         assert isinstance(X, np.ndarray)
@@ -35,25 +51,29 @@ class SparseAE(AutoEncoder):
         self.theta = theta  # Update
         # Start go forward
         cost = 0
+        # TODO
+        '''
         if self.dpark_enable:
             # TODO
             print 'Dpark enabled.'
-        else:
-            # Vectorized solution
-            self.feed_forward(X)
-            rho_ = np.sum(self.a2, axis=1).reshape(self.a2.shape[0], 1)
-            cost += np.linalg.norm(self.a3 - self.ipt)
-            cost, rho_ = cost / X.shape[1], rho_ / X.shape[1]
-            # KL penalty
-            KL_penalty = self.rho * np.log(self.rho / rho_) -\
-                (1 - self.rho) * np.log((1 - self.rho) / (1 - rho_))
-            cost += self.sparse_beta * np.sum(KL_penalty)
-            # weight decay
-            cost += self.lamb / 2 * (np.linalg.norm(self.w1) ** 2 +
-                                     np.linalg.norm(self.w2) ** 2)
+        '''
+        # Vectorized solution
+        self.feed_forward(X)
+        rho_ = np.sum(self.a2, axis=1).reshape(self.a2.shape[0], 1)
+        cost += np.power(np.linalg.norm(self.a3 - self.a1), 2) / 2
+        cost, rho_ = cost / X.shape[1], rho_ / X.shape[1]
+        # KL penalty
+        KL_penalty = self.rho * np.log(self.rho / rho_) +\
+            (1 - self.rho) * np.log((1 - self.rho) / (1 - rho_))
+        cost += self.sparse_beta * np.sum(KL_penalty)
+        # weight decay
+        cost += self.lamb / 2 * (np.linalg.norm(self.w1) ** 2 +
+                                 np.linalg.norm(self.w2) ** 2)
+        if self.verbose and not self.debug:
+            print 'Cost is: %f' % cost
         return cost
 
-    def compute_grad(self, X, theta=self.theta):
+    def compute_grad(self, theta, X):
         """Back-propagation on SparseAE"""
         # safeguard
         assert isinstance(X, np.ndarray)
@@ -62,18 +82,16 @@ class SparseAE(AutoEncoder):
         self.theta = theta  # Update
         # Start iterate
         self.feed_forward(X)
-        rho_ = np.sum(self.a2, axis=1).reshape(self.a2.shape[0], 1)
+        rho_ = np.sum(self.a2, axis=1).reshape(self.a2.shape[0], 1)/X.shape[1]
         sigma3 = -(self.a1 - self.a3) * (self.a3 * (1 - self.a3))
         sparse_sigma = -(self.rho / rho_) + (1 - self.rho) / (1 - rho_)
         sigma2 = (np.dot(self.w2.T, sigma3) + self.sparse_beta * sparse_sigma)\
             * (self.a2 * (1 - self.a2))
         # Desired gradients
-        w2_grad = np.sum(np.dot(sigma3, self.a2.T), axis=1).\
-                         reshape(self.hidden_size, 1)
-        b2_grad = np.sum(sigma3, axis=1).reshape(self.input_size, 1)
-        w1_grad = np.sum(np.dot(sigma2, self.a1.T), axis=1).\
-                         reshape(self.input_size, 1)
-        b1_grad = np.sum(sigma2, axis=1).reshape(self.hidden_size, 1)
+        w2_grad = np.dot(sigma3, self.a2.T)
+        b2_grad = np.sum(sigma3, axis=1)
+        w1_grad = np.dot(sigma2, self.a1.T)
+        b1_grad = np.sum(sigma2, axis=1)
         # average and weight decay
         w2_grad = w2_grad / X.shape[1] + self.lamb * self.w2
         b2_grad = b2_grad / X.shape[1]
