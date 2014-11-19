@@ -1,5 +1,5 @@
 from .sample import load_sample
-from .visualize import visualize
+from .visualize import disp_effect
 
 __all__ = ['load_sample',
-           'visualize']
+           'disp_effect']

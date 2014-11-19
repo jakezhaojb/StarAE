@@ -4,7 +4,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-from utils import factor2
+from .utils import factor2
 
 
 def disp_effect(W, n_disp=100):
@@ -33,7 +33,7 @@ def disp_effect(W, n_disp=100):
                             disp_c*(unit_disp_c+1)-1))
     for i in range(disp_r):
         for j in range(disp_c):
-            unit_x = x[i*disp_r+j, :].reshape(unit_disp_r, unit_disp_c)
+            unit_x = x[i*disp_c+j, :].reshape(unit_disp_r, unit_disp_c)
             row_pos = i * (unit_disp_r + 1)
             col_pos = j * (unit_disp_c + 1)
             visual_grid[row_pos: row_pos+unit_disp_r,
