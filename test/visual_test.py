@@ -15,7 +15,7 @@ def load_test():
         print 'Load test testing correct.'
         return
     else:
-        print 'Load test testing correct.'
+        print 'Load test testing WRONG.'
         return
 
 

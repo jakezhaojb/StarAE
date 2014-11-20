@@ -3,6 +3,7 @@
 
 from __future__ import division
 from abc import ABCMeta, abstractmethod
+import sys
 import numpy as np
 from scipy import sparse
 
@@ -18,8 +19,8 @@ class AutoEncoder(NeuralNetBase):
     # TODO OPT paras completion
     def __init__(self, input_size, hidden_size, acti_fun='sigmoid',
                  optimize_method='sgd', max_iter=1000, tol=1.e-3, alpha=0.1,
-                 mini_batch=0, adastep=True, momentum=True, momen_beta=0.95,
-                 dpark_enable=False, dpark_run='process',
+                 mini_batch=0, adastep=False, momentum=False,
+                 momen_beta=0.95, dpark_enable=False, dpark_run='process',
                  dpark_threads='-p 4', debug=False, verbose=False):
         # safegruard code TODO
 
@@ -61,10 +62,13 @@ class AutoEncoder(NeuralNetBase):
         # TODO is it a good strategy to record everything here?
         # TODO is this a good strategy to record things?
         # TODO efficiency
+        '''
         s = ((self.hidden_size, self.input_size),
              (self.input_size, self.hidden_size),
              (self.hidden_size, 1), (self.input_size, 1))
         self.w1, self.w2, self.b1, self.b2 = de_vectorize(self.theta, 4, s)
+        '''
+        self.devec_theta()
         self.a1 = X
         self.z2 = np.dot(self.w1, X) + self.b1
         self.a2 = activate(self.z2, self.acti_fun)
@@ -85,10 +89,15 @@ class AutoEncoder(NeuralNetBase):
     def train(self, X, *args):
         """Optimize weight and bias"""
         # TODO must serielize it? can be slow when training some large nets
+        # TODO maybe use a TABLE
         if self.optimize_method == 'bfgs':
             self.theta = bfgs(self.compute_cost, self.theta, X,
                               self.compute_grad, args=args,
                               maxiter=self.max_iter, tol=self.tol)
+        elif self.optimize_method == 'cg':
+            self.theta = cg(self.compute_cost, self.theta, X,
+                            self.compute_grad, args=args,
+                            maxiter=self.max_iter, tol=self.tol)
         elif self.optimize_method == 'sgd':
             self.theta = sgd(self.compute_cost, self.theta, X,
                              self.compute_grad, args=args, alpha=0.1,
@@ -123,3 +132,10 @@ class AutoEncoder(NeuralNetBase):
             print 'Gradient checked correct'
         else:
             print 'Gradient checked FAILED, diff: %e' % (diff)
+
+    def devec_theta(self):
+        s = ((self.hidden_size, self.input_size),
+             (self.input_size, self.hidden_size),
+             (self.hidden_size, 1), (self.input_size, 1))
+        self.w1, self.w2, self.b1, self.b2 = de_vectorize(self.theta, 4, s)
+

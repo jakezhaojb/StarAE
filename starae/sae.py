@@ -13,10 +13,10 @@ class SparseAE(AutoEncoder):
     """docstring for SparseAE"""
     def __init__(self, input_size, hidden_size, acti_fun='sigmoid',
                  optimize_method='sgd', max_iter=1000, tol=1.e-3, alpha=0.1,
-                 mini_batch=0, adastep=True, momentum=True, momen_beta=0.95,
-                 dpark_enable='False', dpark_run='process',
-                 dpark_threads='-p 4', debug='False', lamb=0.0001,
-                 rho=0.001, sparse_beta=3, verbose=False):
+                 mini_batch=0, adastep=False, momentum=False,
+                 momen_beta=0.95, dpark_enable=False, dpark_run='process',
+                 dpark_threads='-p 4', debug=False, lamb=0.0001,
+                 rho=0.01, sparse_beta=3, verbose=False):
         super(SparseAE, self).__init__(input_size=input_size,
                                        hidden_size=hidden_size,
                                        acti_fun=acti_fun,
@@ -84,7 +84,15 @@ class SparseAE(AutoEncoder):
         self.feed_forward(X)
         rho_ = np.sum(self.a2, axis=1).reshape(self.a2.shape[0], 1)/X.shape[1]
         sigma3 = -(self.a1 - self.a3) * (self.a3 * (1 - self.a3))
-        sparse_sigma = -(self.rho / rho_) + (1 - self.rho) / (1 - rho_)
+        if self.debug:  # Here is likely to incur Numerical issue
+            import warnings
+            warnings.filterwarnings('error')
+            try:
+                sparse_sigma = -(self.rho / rho_) + (1 - self.rho) / (1 - rho_)
+            except RuntimeWarning:
+                import pdb; pdb.set_trace()
+        else:
+            sparse_sigma = -(self.rho / rho_) + (1 - self.rho) / (1 - rho_)
         sigma2 = (np.dot(self.w2.T, sigma3) + self.sparse_beta * sparse_sigma)\
             * (self.a2 * (1 - self.a2))
         # Desired gradients

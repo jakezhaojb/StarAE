@@ -5,9 +5,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from .utils import factor2
+from .sample import rescale
 
 
-def disp_effect(W, n_disp=100):
+def disp_effect(W, n_disp=100, fname=None):
     """Visualize the weights of trained NN."""
     # safeguard
     assert isinstance(W, np.ndarray)
@@ -34,20 +35,14 @@ def disp_effect(W, n_disp=100):
     for i in range(disp_r):
         for j in range(disp_c):
             unit_x = x[i*disp_c+j, :].reshape(unit_disp_r, unit_disp_c)
+            # For pertain the boundary being black
+            unit_x = rescale(unit_x, axis=-1)
             row_pos = i * (unit_disp_r + 1)
             col_pos = j * (unit_disp_c + 1)
             visual_grid[row_pos: row_pos+unit_disp_r,
                         col_pos: col_pos+unit_disp_c] = unit_x
-    im = plt.imshow(visual_grid, cmap=cm.gray, vmax=1, vmin=0)
-    # TODO
-    plt.show()
-    return im  # TODO improve this visualize, make it fancy!
-
-
-def main():
-    W = np.random.rand(25, 64)
-    disp_effect(W)
-
-
-if __name__ == '__main__':
-    main()
+    plt.imshow(visual_grid, cmap=cm.gray)
+    if fname:
+        plt.savefig(fname)
+    else:
+        plt.show()

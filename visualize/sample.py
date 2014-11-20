@@ -43,4 +43,41 @@ def load_sample(sample_name, patch_size=0, n_patches=0):
                 patch = img[x[j]: x[j]+patch_size, y[k]: y[k]+patch_size]
                 patch = patch.reshape(patch_size**2, 1, order='F')
                 patch_all[:, n_patches_img*i + n_k*j + k] = patch.squeeze()
+    patch_all = standardize(patch_all)
     return patch_all
+
+
+def standardize(data, axis=0):
+    """Standardize data to [0.1, 0.9]"""
+    if axis == 0:
+        data_ = data - np.mean(data, axis)
+        data_std = 3 * np.std(data_, axis).reshape(1, data.shape[1])
+    elif axis == 1:
+        data_ = data - np.mean(data, axis)
+        data_std = 3 * np.std(data_, axis).reshape(data.shape[1], 1)
+    else:
+        print 'Argument not accepted.'
+        return
+    data_ = np.maximum(np.minimum(data_, data_std), -data_std) / data_std
+    data_ = (data_ + 1) * 0.4 + 0.1
+    return data_
+
+
+def rescale(data, axis=0):
+    """Rescale data"""
+    if axis == 0:
+        r_max = np.max(data, axis).reshape(1, data.shape[1])
+        r_min = np.min(data, axis).reshape(1, data.shape[1])
+        data = (data - r_min) / (r_max - r_min)
+    elif axis == 1:
+        c_max = np.max(data, axis).reshape(data.shape[1], 1)
+        c_min = np.min(data, axis).reshape(data.shape[1], 1)
+        data = (data - c_min) / (c_max - c_min)
+    elif axis == -1:  # element-wise
+        e_max = np.max(data)
+        e_min = np.min(data)
+        data = (data - e_min) / (e_max - e_min)
+    else:
+        print 'Argument not accepted.'
+        return
+    return data

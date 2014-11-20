@@ -3,4 +3,13 @@ SAE:
  Optimization test.
  Complete docstring
  Complete 'verbose' mode, printing more information.
- Improve visualization, making it fancier!
+ *** Improve visualization, making it fancier!
+ *** Normalization?
+ *** rho_ = all one.
+
+
+After talking to Wan:
+1. Sixin Zhang and Xiang Zhang, Ross
+2. Done. Visualizition improve
+3. Done. BFGS works. Go on testing your SparseAe, to make it work rightly
+4. Normalization right? Or rescale? Or standardize? See FAQ of NN
