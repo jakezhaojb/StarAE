@@ -6,6 +6,7 @@ SAE:
  *** Improve visualization, making it fancier!
  *** Normalization?
  *** rho_ = all one.
+ All paths are needed to regulized, e.g, IMAGES.mat and sys.path
 
 
 After talking to Wan:

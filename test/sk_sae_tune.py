@@ -5,7 +5,7 @@
 
 import os
 import sys
-sys.path.append('/Users/zhaojunbo/Projects/StarAE')
+sys.path.append('..')
 
 from starae import SparseAE
 import visualize as vs
@@ -18,7 +18,7 @@ from starae.utils import activate
 def main():
     """Tuning for SparseAE"""
     # First layer
-    T = SparseAE(64, 25, optimize_method='cg', max_iter=1,
+    T = SparseAE(64, 25, optimize_method='cg', max_iter=400,
                  debug=0, verbose=True, tol=1e-8, mini_batch=32)
     X = vs.load_sample('IMAGES.mat', patch_size=8, n_patches=10000)
     T.train(X)
@@ -35,14 +35,22 @@ def main():
     X = activate(np.dot(T.w1, X) + T.b1)
     if not os.path.isdir('./imgs'):
         os.system('mkdir imgs')
-    for idx, param_elem in enumerate(param[:2]):
-        S = SparseAE(25, 9, optimize_method='cg', max_iter=1,
-                     debug=0, verbose=True, tol=1e-8, mini_batch=32,
-                     **param_elem)
-        S.train(X)
-        S.devec_theta()
-        fname = 'imgs/' + str(idx) + '.jpg'
-        vs.disp_effect(S.w1, fname=fname)
+    for idx, param_elem in enumerate(param):
+        import warnings
+        warnings.filterwarnings('error')
+        try:
+            S = SparseAE(25, 9, optimize_method='cg', max_iter=400,
+                         debug=0, verbose=True, tol=1e-8, mini_batch=32,
+                         **param_elem)
+            S.train(X)
+            S.devec_theta()
+            fname = 'imgs/' + str(idx) + '.jpg'
+            vs.disp_effect(S.w1, fname=fname)
+        except:
+            fname = 'imgs/' + 'log'
+            fid = open(fname, 'w')
+            fid.write('Exception: ' + str(idx) + '\n')
+            fid.close()
 
 
 if __name__ == '__main__':
