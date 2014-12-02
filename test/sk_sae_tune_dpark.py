@@ -27,7 +27,7 @@ def main():
     X = vs.load_sample('IMAGES.mat', patch_size=8, n_patches=10000)
     T.train(X)
     T.devec_theta()
-    # vs.disp_effect(T.w1, '1.jpg')
+    vs.disp_effect(T.w1, fname='Fst_lyr.jpg')
 
     # Second layer
     rho = [1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1, 10, 100]
@@ -57,6 +57,11 @@ def main():
             fid.write('Exception: ' + str(idx) + '\n')
             fid.close()
     '''
+    # Break point re-computing
+    fls = os.listdir('./imgs/weight')
+    fls = map(lambda x: int(x[:x.find('.')]), fls)
+    for fl in fls:
+        param = param[:fl] + param[fl+1:]
     # dpark parallel computing
     dpark_ctx = DparkContext('process')
     dpark_n_length = len(param)
