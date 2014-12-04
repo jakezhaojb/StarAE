@@ -6,6 +6,7 @@ from __future__ import division
 import numpy as np
 from scipy import optimize
 from inspect import ismethod
+from copy import copy
 
 
 def bfgs(compute_cost, init_guess, X, compute_grad, args=(),
@@ -65,21 +66,22 @@ def sgd(compute_cost, init_guess, X, compute_grad, args=(),
             iter_grad = compute_grad(*_args)
             # adastep
             if adastep:
-                iter_grad[iter_grad < 1.e-14] = 1.e-10  # avoid nan
                 ada += iter_grad ** 2
                 step_size = alpha / np.sqrt(ada)
+                # safeguard
+                step_size[step_size > 1] = 1
             else:
-                step_size = alpha
+                step_size = copy(alpha)
             # momentum
             if momentum:
-                momen = beta * momen - (1-beta) * iter_grad
+                momen = beta * momen - iter_grad
             else:
                 momen = -iter_grad
             # go downhill
             theta += momen * step_size
         # print 'iter: %d, expirical loss: %f' % (oloop, iter_cost)
         # check tolerance
-        if np.linalg.norm(iter_grad) < tol:  # TODO some better criterion?
+        if np.linalg.norm(iter_cost) < tol:  # TODO some better criterion?
             break
 
     # TODO some tricks of SGD??
