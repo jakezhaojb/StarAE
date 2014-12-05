@@ -3,7 +3,7 @@
 # Author: Junbo Zhao
 
 import sys
-sys.path.append('/Users/zhaojunbo/Projects/StarAE')
+sys.path.append('..')
 import numpy as np
 
 import visualize as vs

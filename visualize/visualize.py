@@ -2,6 +2,8 @@
 # Author: Junbo Zhao
 
 import numpy as np
+import matplotlib as mpl
+mpl.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from .utils import factor2

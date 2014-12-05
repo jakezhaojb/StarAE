@@ -7,7 +7,7 @@ from __future__ import division
 
 import os
 import sys
-sys.path.append('..')
+sys.path.append('../..')
 
 from starae import SparseAE
 import visualize as vs

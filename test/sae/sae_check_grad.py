@@ -4,7 +4,7 @@
 # This script is used to check the gradient computing for SparseAE
 
 import sys
-sys.path.append('/Users/zhaojunbo/Projects/StarAE')
+sys.path.append('../..')
 import numpy as np
 
 from starae import SparseAE

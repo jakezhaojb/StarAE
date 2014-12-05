@@ -1,13 +1,11 @@
 SAE:
- compute_cost and compute_grad, acti_functions.
- Optimization test.
  Complete docstring
  Complete 'verbose' mode, printing more information.
- *** Improve visualization, making it fancier!
  *** Normalization?
- *** rho_ = all one.
- All paths are needed to regulized, e.g, IMAGES.mat and sys.path
 
+DAE
+CAE
+***  mini-batch BFGS + mini-batch CG
 
 After talking to Wan:
 1. Sixin Zhang and Xiang Zhang, Ross
