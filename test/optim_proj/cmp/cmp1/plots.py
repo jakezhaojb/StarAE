@@ -36,11 +36,14 @@ def plot_loss():
     loss_bfgs = np.loadtxt('log/bfgs.csv', delimiter=',')
     loss_cg = np.loadtxt('log/cg.csv', delimiter=',')
     loss_sgd = np.loadtxt('log/sgd.csv', delimiter=',')
-    plt.plot(loss_bfgs[:, 0], loss_bfgs[:, 1], 'r')
-    plt.plot(loss_cg[:, 0], loss_cg[:, 1], 'g')
-    plt.plot(loss_sgd[:600, 0], loss_sgd[:600, 1], 'b*')
+    plt.plot(loss_bfgs[:, 0], loss_bfgs[:, 1], 'r', label='bfgs')
+    plt.plot(loss_cg[:, 0], loss_cg[:, 1], 'g', label='cg')
+    plt.plot(loss_sgd[:600, 0], loss_sgd[:600, 1], 'b*', label='sgd')
     plt.xlim(0, 20)
-    plt.show()
+    plt.legend(loc='best')
+    plt.ylabel('loss function')
+    plt.xlabel('time/s')
+    plt.savefig('log/graph.png')
 
 
 def listdir_sort(path):
@@ -53,7 +56,7 @@ def listdir_sort(path):
 
 def main():
     plot_loss()
-    plot_weight()
+    # plot_weight()
 
 
 if __name__ == '__main__':

@@ -11,7 +11,7 @@
 *.swp
 
 # Dataset and Loggger
-visualize/data
+visualize/data/*mat
 *log/
 
 # backup
