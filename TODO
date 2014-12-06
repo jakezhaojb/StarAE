@@ -3,9 +3,13 @@ SAE:
  Complete 'verbose' mode, printing more information.
  *** Normalization?
 
+***  mini-batch BFGS + mini-batch CG
+??? Mini-batch BFGS doesn't make sense! If in each inner-loop, it updates only one iterate, then how does the pseudo Hessian update? With only 1 iterate, pseudo Hessian not updated, then BFGS's value is vanished. See some paper..
+
+logger has to be involved in ae.py... This makes me very uncomfortable
+
 DAE
 CAE
-***  mini-batch BFGS + mini-batch CG
 
 After talking to Wan:
 1. Sixin Zhang and Xiang Zhang, Ross

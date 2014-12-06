@@ -10,5 +10,9 @@
 # Vim extensions
 *.swp
 
-# Dataset
+# Dataset and Loggger
 visualize/data
+*log/
+
+# backup
+*backup*

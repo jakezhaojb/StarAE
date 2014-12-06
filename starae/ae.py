@@ -3,9 +3,11 @@
 
 from __future__ import division
 from abc import ABCMeta, abstractmethod
+import os
 import sys
 import numpy as np
 from scipy import sparse
+from time import clock
 
 from .utils import *
 from .optim import *
@@ -16,12 +18,11 @@ class AutoEncoder(NeuralNetBase):
     """docstring for AutoEncoder"""
     __metaclass__ = ABCMeta
 
-    # TODO OPT paras completion
     def __init__(self, input_size, hidden_size, acti_fun='sigmoid',
                  optimize_method='sgd', max_iter=1000, tol=1.e-3, alpha=0.1,
                  mini_batch=0, adastep=False, momentum=False,
                  momen_beta=0.95, dpark_enable=False, dpark_run='process',
-                 dpark_threads='-p 4', debug=False, verbose=False):
+                 dpark_threads='-p 4', debug=False, verbose=False, logger=''):
         # safegruard code TODO
 
         self.input_size = input_size
@@ -39,14 +40,21 @@ class AutoEncoder(NeuralNetBase):
         self.dpark_run = dpark_run
         self.dpark_threads = dpark_threads
         self.debug = debug
-        self.verbose = verbose
+        self.verbose = verbose and logger
+        self.logger = logger.partition('.')[0]
+        if self.verbose:
+            if not os.path.isdir('log'):
+                os.mkdir('log')
 
     def init_param(self):
         """Initiate parameters of AutoEncoder"""
-        # TODO docstring
         # weights and bias are organized in tuples
-        w1 = np.random.uniform(-1, 1, (self.hidden_size, self.input_size))
-        w2 = np.random.uniform(-1, 1, (self.input_size, self.hidden_size))
+        # X. Glorot, Y. Bengio, 2010
+        r = np.sqrt(6) / np.sqrt(self.hidden_size+self.input_size+1)
+        w1 = np.random.rand(self.hidden_size, self.input_size) * 2 * r - r
+        w2 = np.random.rand(self.input_size, self.hidden_size) * 2 * r - r
+        # w1 = np.random.uniform(-1, 1, (self.hidden_size, self.input_size))
+        # w2 = np.random.uniform(-1, 1, (self.input_size, self.hidden_size))
         b1 = np.zeros(self.hidden_size)
         b2 = np.zeros(self.input_size)
         # flag: whether parameters are initiated
@@ -90,6 +98,9 @@ class AutoEncoder(NeuralNetBase):
         """Optimize weight and bias"""
         # TODO must serielize it? can be slow when training some large nets
         # TODO maybe use a TABLE
+        if self.verbose:
+            self.timer = clock()
+            self.time_stamp = 0
         if self.optimize_method == 'bfgs':
             self.theta = bfgs(self.compute_cost, self.theta, X,
                               self.compute_grad, args=args,
