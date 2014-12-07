@@ -7,7 +7,7 @@ import os
 import sys
 import numpy as np
 from scipy import sparse
-from time import clock
+from time import time
 
 from .utils import *
 from .optim import *
@@ -99,7 +99,7 @@ class AutoEncoder(NeuralNetBase):
         # TODO must serielize it? can be slow when training some large nets
         # TODO maybe use a TABLE
         if self.verbose:
-            self.timer = clock()
+            self.timer = time()
             self.time_stamp = 0
         if self.optimize_method == 'bfgs':
             self.theta = bfgs(self.compute_cost, self.theta, X,

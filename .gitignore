@@ -16,3 +16,6 @@ visualize/data/*mat
 
 # backup
 *backup*
+
+# 
+test/optim_proj/cmp/*/*.png

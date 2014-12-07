@@ -5,7 +5,7 @@ from __future__ import division
 
 import os
 import numpy as np
-from time import clock
+from time import time
 
 from .utils import *
 from .ae import AutoEncoder
@@ -74,7 +74,7 @@ class SparseAE(AutoEncoder):
                                  np.linalg.norm(self.w2) ** 2)
         if self.verbose and not self.debug:
             print 'cost is: %f' % cost
-            timer2 = clock()
+            timer2 = time()
             # global time
             g_time = timer2 - self.timer
             # record cost reducing
@@ -82,14 +82,12 @@ class SparseAE(AutoEncoder):
             with open(os.path.join('log', self.logger+'.csv'), 'a') as flog:
                 flog.write('{0:.3f},{1:.3f}\n'.format(g_time, cost))
             # record weigths
-            if os.path.isdir(os.path.join('log', self.logger)):
-                os.system('rm -rf '+os.path.join('log', self.logger, '*'))
-            else:
+            if not os.path.isdir(os.path.join('log', self.logger)):
                 os.mkdir(os.path.join('log', self.logger))
             if g_time > self.time_stamp:
                 fname = os.path.join('log', self.logger, str(self.time_stamp))
                 np.savetxt(fname, self.w1, delimiter=',')
-                self.time_stamp += 20
+                self.time_stamp += 10
 
         return cost
 
