@@ -23,7 +23,7 @@ Settings
     BFGS: max_iter=400
     CG: max_iter=400
     SGD: max_iter=140, momen_beta=.95, alpha=.01, adas=True
-    Sample: [8x8x40000]
+    Sample: [8x8x40960]
 
 #### cmp4:
     BFGS: max_iter=500
@@ -35,10 +35,10 @@ Settings
     BFGS: max_iter=600
     CG: max_iter=600
     SGD: max_iter=220, momen_beta=.95, alpha=.01, adas=True
-    Sample: [8x8x80000]
+    Sample: [8x8x81920]
 
 #### cmp6:
     BFGS: max_iter=700
     CG: max_iter=700
     SGD: max_iter=260, momen_beta=.95, alpha=.01, adas=True
-    Sample: [8x8x100000]
+    Sample: [8x8x102400]

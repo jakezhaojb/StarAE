@@ -83,7 +83,7 @@ class SparseAE(AutoEncoder):
                 flog.write('{0:.3f},{1:.3f}\n'.format(g_time, cost))
             # record weigths
             if os.path.isdir(os.path.join('log', self.logger)):
-                os.remove(os.path.join('log', self.logger, '*'))
+                os.system('rm -rf '+os.path.join('log', self.logger, '*'))
             else:
                 os.mkdir(os.path.join('log', self.logger))
             if g_time > self.time_stamp:

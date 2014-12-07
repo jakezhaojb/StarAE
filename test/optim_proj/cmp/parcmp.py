@@ -6,25 +6,26 @@
 import os
 from dpark import DparkContext
 
-n_cmp = 6
+cmp_list = range(6)
 
 
 def main():
-    for i in range(n_cmp):
+    current_path = os.path.dirname(os.path.abspath(__file__))
+    for i in cmp_list:
         assert os.path.isdir('cmp'+str(i+1))
     dpark_ctx = DparkContext('process')
 
     # Dpark thread
     def map_iter(i):
         dir_name = 'cmp' + str(i+1)
-        # TODO redo or ?
-        if os.path.isdir(os.path.join(dir_name, 'log')):
+        logger = os.path.join(dir_name, 'log')
+        if os.path.isdir(logger) and os.listdir(logger):
             return
         print "Start running: ", i+1
-        os.system('cd cmp' + str(i))
+        os.chdir(os.path.join(current_path, 'cmp') + str(i+1))
         os.system('python ./cmp.py')
 
-    dpark_ctx.makeRDD(range(n_cmp)).foreach(map_iter)
+    dpark_ctx.makeRDD(cmp_list).foreach(map_iter)
     print 'Done.'
 
 

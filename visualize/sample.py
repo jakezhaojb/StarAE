@@ -58,6 +58,7 @@ def standardize(data, axis=0):
     else:
         print 'Argument not accepted.'
         return
+    data_std[data_std < 1e-6] += 1e-6 # safeguard
     data_ = np.maximum(np.minimum(data_, data_std), -data_std) / data_std
     data_ = (data_ + 1) * 0.4 + 0.1
     return data_

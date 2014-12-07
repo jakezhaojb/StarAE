@@ -26,7 +26,7 @@ def main():
     T.append(T1)
     T.append(T2)
     T.append(T3)
-    X = vs.load_sample('IMAGES25.mat', patch_size=8, n_patches=100000)
+    X = vs.load_sample('IMAGES25.mat', patch_size=8, n_patches=102400)
 
     name = ['bfgs.png', 'cg.png', 'sgd.png']
     for i in range(3):
