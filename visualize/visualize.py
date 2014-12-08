@@ -46,5 +46,6 @@ def disp_effect(W, n_disp=100, fname=None):
     plt.imshow(visual_grid, cmap=cm.gray)
     if fname:
         plt.savefig(fname)
+        plt.clf()
     else:
         plt.show()

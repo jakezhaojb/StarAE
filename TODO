@@ -8,11 +8,9 @@ SAE:
 
 logger has to be involved in ae.py... This makes me very uncomfortable
 
+compute_cost add a flag... uuuuuuugly.
+
 DAE
 CAE
 
-After talking to Wan:
-1. Sixin Zhang and Xiang Zhang, Ross
-2. Done. Visualizition improve
-3. Done. BFGS works. Go on testing your SparseAe, to make it work rightly
-4. Normalization right? Or rescale? Or standardize? See FAQ of NN
+*** CG and logger as epoch

@@ -13,10 +13,10 @@ import visualize as vs
 def main():
     """test for Sparse AE"""
     T = []
-    T1 = SparseAE(64, 49, optimize_method='bfgs', max_iter=200,
+    T1 = SparseAE(64, 49, optimize_method='bfgs', max_iter=400,
                   debug=0, verbose=True, tol=1e-8, mini_batch=32,
                   logger='bfgs.csv')
-    T2 = SparseAE(64, 49, optimize_method='cg', max_iter=200,
+    T2 = SparseAE(64, 49, optimize_method='cg', max_iter=400,
                   debug=0, verbose=True, tol=1e-8, mini_batch=32,
                   logger='cg.csv')
     T3 = SparseAE(64, 49, optimize_method='sgd', max_iter=100,

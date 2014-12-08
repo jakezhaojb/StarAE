@@ -45,7 +45,7 @@ class SparseAE(AutoEncoder):
             self.lamb = 0
         '''
 
-    def compute_cost(self, theta, X):
+    def compute_cost(self, theta, X, epoch_flag=1, time_flag=1):  # TODO ugly.
         """SparseAE lost function"""
         # safeguard
         assert isinstance(X, np.ndarray)
@@ -72,22 +72,49 @@ class SparseAE(AutoEncoder):
         # weight decay
         cost += self.lamb / 2 * (np.linalg.norm(self.w1) ** 2 +
                                  np.linalg.norm(self.w2) ** 2)
-        if self.verbose and not self.debug:
+        # TODO should be moved to optim module
+        if self.verbose and not self.debug:  # TODO sooooo ugly..
             print 'cost is: %f' % cost
-            timer2 = time()
-            # global time
-            g_time = timer2 - self.timer
-            # record cost reducing
-            self.logger = self.logger.partition('.')[0]
-            with open(os.path.join('log', self.logger+'.csv'), 'a') as flog:
-                flog.write('{0:.3f},{1:.3f}\n'.format(g_time, cost))
-            # record weigths
-            if not os.path.isdir(os.path.join('log', self.logger)):
-                os.mkdir(os.path.join('log', self.logger))
-            if g_time > self.time_stamp:
-                fname = os.path.join('log', self.logger, str(self.time_stamp))
+            if time_flag:
+                # Timer logger.
+                if not os.path.isdir('log/timer'):
+                    os.mkdir('log/timer')
+                timer2 = time()
+                # global time
+                g_time = timer2 - self.timer
+                # record cost reducing
+                self.logger = self.logger.partition('.')[0]
+                with open(os.path.join('log/timer', self.logger+'.csv'),
+                          'a') as flog:
+                    flog.write('{0:.3f},{1:.3f}\n'.format(g_time, cost))
+                # record weigths
+                if not os.path.isdir(os.path.join('log/timer', self.logger)):
+                    os.mkdir(os.path.join('log/timer', self.logger))
+                if g_time > self.time_stamp:
+                    fname = os.path.join('log/timer', self.logger,
+                                         str(self.time_stamp))
+                    np.savetxt(fname, self.w1, delimiter=',')
+                    self.time_stamp += 10
+            if epoch_flag:
+                # Epoch logger
+                if not os.path.isdir('log/epoch'):
+                    os.mkdir('log/epoch')
+                self.logger = self.logger.partition('.')[0]
+                with open(os.path.join('log/epoch', self.logger+'.csv'),
+                          'a') as flog:
+                    flog.write('{0:.4f}\n'.format(cost))
+                # record weights
+                if not os.path.isdir(os.path.join('log/epoch', self.logger)):
+                    os.mkdir(os.path.join('log/epoch', self.logger))
+                # Get weight file number
+                fname = os.path.join('log/epoch', self.logger)
+                flst = os.listdir(fname)
+                if not flst:
+                    fname = os.path.join(fname, '0')
+                else:
+                    flst = map(lambda x: int(x), flst)
+                    fname = os.path.join(fname, str(max(flst)+1))
                 np.savetxt(fname, self.w1, delimiter=',')
-                self.time_stamp += 10
 
         return cost
 

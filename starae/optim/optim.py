@@ -5,6 +5,7 @@ from __future__ import division
 
 import numpy as np
 from scipy import optimize
+from scipy import linalg
 from inspect import ismethod
 from copy import copy
 
@@ -12,16 +13,48 @@ from copy import copy
 def bfgs(compute_cost, init_guess, X, compute_grad, args=(),
          maxiter=1000, tol=1.e-7):
     """BFGS revoke"""
-    # TODO Notice: input data should be put in args
     assert ismethod(compute_cost)
     assert ismethod(compute_grad)
     assert isinstance(init_guess, np.ndarray)
 
+    # Revoke version
     args = (X, ) + args
     # TODO bad naming
     opt_bfgs = optimize.fmin_l_bfgs_b(compute_cost, init_guess, compute_grad,
                                       args=args, maxiter=maxiter, pgtol=tol)
     return opt_bfgs[0]
+
+    '''
+    # Python implementation, for Optimization testing.
+    eta = 0.5
+    theta = init_guess
+    B = np.eye(theta.shape[0])
+    _args = (theta, X, ) + args
+    grad = compute_grad(*_args)
+    for i in range(maxiter):
+        grad_pre = grad.copy()
+        _args = (theta, X) + args
+        cost = compute_cost(*_args)
+        grad = compute_grad(*_args)
+        if linalg.norm(grad) < tol:
+            break
+        p = linalg.solve(B, -grad)  # TODO so slow!!!
+        # line search
+        alpha = 1
+        while 1:
+            _args = (theta+alpha*p, X, 0) + args  # TODO too ugly
+            if compute_cost(*_args) < cost+alpha*eta*np.dot(grad.T, p):
+                break
+            alpha = alpha / 2.
+        # end line search
+        theta += alpha * p
+        y = np.matrix(grad - grad_pre).T
+        delt = np.matrix(alpha * p).T
+        if y.T * delt > 0:
+            B += (y * y.T) / (y.T * delt) -\
+                (B * delt * delt.T * B) / (delt.T * B * delt)
+    return theta
+    '''
 
 
 def cg(compute_cost, init_guess, X, compute_grad, args=(),
@@ -58,10 +91,13 @@ def sgd(compute_cost, init_guess, X, compute_grad, args=(),
         # initialize some variables
         ada = np.zeros(shape=init_guess.shape)
         momen = np.zeros(shape=init_guess.shape)
+        # outer cost computation
+        _args = (theta, X, 1, 0, ) + args
+        compute_cost(*_args)  # outer_cost
         # inner-loop
         for iloop in mini_batch_idx:
-            _args = (theta, X, ) + args
-            iter_cost = compute_cost(*_args)
+            _args = (theta, X, 0, 1, ) + args
+            compute_cost(*_args)  # inner_cost
             _args = (theta, X[:, iloop], ) + args
             iter_grad = compute_grad(*_args)
             # adastep
@@ -79,9 +115,8 @@ def sgd(compute_cost, init_guess, X, compute_grad, args=(),
                 momen = -iter_grad
             # go downhill
             theta += momen * step_size
-        # print 'iter: %d, expirical loss: %f' % (oloop, iter_cost)
         # check tolerance
-        if np.linalg.norm(iter_cost) < tol:  # TODO some better criterion?
+        if linalg.norm(iter_grad) < tol:  # TODO some better criterion?
             break
 
     # TODO some tricks of SGD??

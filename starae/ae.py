@@ -45,6 +45,26 @@ class AutoEncoder(NeuralNetBase):
         if self.verbose:
             if not os.path.isdir('log'):
                 os.mkdir('log')
+            # TODO not make sense, for example test code creates three method..
+            '''
+            if os.path.isdir('log'):
+                while 1:
+                    print 'Overwrite log?[Y/n]'
+                    key = raw_input()
+                    if key == 'Y':
+                        print 'Overwrite.'
+                        os.system('rf -rf log')
+                        os.mkdir('log')
+                        break
+                    elif key == 'n':
+                        print 'Not to overwrite'
+                        self.verbose = False
+                        break
+                    else:
+                        continue
+            else:
+                os.mkdir('log')
+            '''
 
     def init_param(self):
         """Initiate parameters of AutoEncoder"""
