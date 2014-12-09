@@ -21,4 +21,6 @@ Number of Layer
 
 Results
 ---
-TODO
+cmp_S means Scale comparisons
+cmp_M means Momentum comparisons
+

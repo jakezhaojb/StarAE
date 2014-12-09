@@ -169,4 +169,3 @@ class AutoEncoder(NeuralNetBase):
              (self.input_size, self.hidden_size),
              (self.hidden_size, 1), (self.input_size, 1))
         self.w1, self.w2, self.b1, self.b2 = de_vectorize(self.theta, 4, s)
-
