@@ -13,7 +13,7 @@ from starae import SparseAE
 def main():
     """Checking gradient computing."""
     T = SparseAE(16, 9, optimize_method='bfgs', max_iter=200,
-                 debug=1, verbose=True)
+                 debug=1, verbose=True)  # TODO Other activation functions.
     X = np.random.rand(16, 128)
     T.gradient_check()
     T.train(X)

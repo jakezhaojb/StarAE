@@ -14,10 +14,10 @@ import visualize as vs
 
 
 def plot_weight():
-    weight_sgd_ada = listdir_sort('/log/epoch/sgd_ada')
-    weight_sgd_Nada = listdir_sort('/log/epoch/sgd_Nada')
-    weight_sgd_ada95 = listdir_sort('/log/epoch/sgd_ada95')
-    weight_sgd_Nada95 = listdir_sort('/log/epoch/sgd_Nada95')
+    weight_sgd_ada = listdir_sort('log/epoch/sgd_ada')
+    weight_sgd_Nada = listdir_sort('log/epoch/sgd_Nada')
+    weight_sgd_ada95 = listdir_sort('log/epoch/sgd_ada95')
+    weight_sgd_Nada95 = listdir_sort('log/epoch/sgd_Nada95')
     
     for weight_file_elem in weight_sgd_ada:
         _weight_file_elem = 'log/epoch/sgd_ada/' + weight_file_elem
@@ -44,10 +44,10 @@ def plot_weight():
 
 
 def plot_loss():
-    loss_sgd_ada = np.loadtxt('/log/epoch/sgd_ada.csv', delimiter=',')
-    loss_sgd_Nada = np.loadtxt('/log/epoch/sgd_Nada.csv', delimiter=',')
-    loss_sgd_ada95 = np.loadtxt('/log/epoch/sgd_ada95.csv', delimiter=',')
-    loss_sgd_Nada95 = np.loadtxt('/log/epoch/sgd_Nada95.csv', delimiter=',')
+    loss_sgd_ada = np.loadtxt('log/epoch/sgd_ada.csv', delimiter=',')
+    loss_sgd_Nada = np.loadtxt('log/epoch/sgd_Nada.csv', delimiter=',')
+    loss_sgd_ada95 = np.loadtxt('log/epoch/sgd_ada95.csv', delimiter=',')
+    loss_sgd_Nada95 = np.loadtxt('log/epoch/sgd_Nada95.csv', delimiter=',')
     plt.plot(range(len(loss_sgd_ada)), loss_sgd_ada, 'r', label='sgd_ada')
     plt.plot(range(len(loss_sgd_Nada)), loss_sgd_Nada, 'g', label='sgd_Nada')
     plt.plot(range(len(loss_sgd_ada95)), loss_sgd_ada95, 'b', label='sgd_ada95')
@@ -56,7 +56,7 @@ def plot_loss():
     plt.legend(loc='best')
     plt.ylabel('loss function')
     plt.xlabel('epoch')
-    plt.savefig('/log/epoch/graph.png')
+    plt.savefig('log/epoch/graph.png')
     plt.clf()
 
 
@@ -73,8 +73,8 @@ def listdir_sort(path):
 
 def main():
     os.system('find . -name "*.png" | grep epoch | xargs rm')
-    plot_loss(id_elem)
-    # plot_weight(id_elem)
+    plot_loss()
+    # plot_weight()
 
 
 if __name__ == '__main__':

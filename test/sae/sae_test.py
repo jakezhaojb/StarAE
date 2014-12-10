@@ -29,6 +29,7 @@ def main():
     T.append(T2)
     T.append(T3)
     X = vs.load_sample('IMAGES.mat', patch_size=8, n_patches=10000)
+    import pdb; pdb.set_trace()
 
     name = ['bfgs.png', 'cg.png', 'sgd.png']
     for i in range(3):

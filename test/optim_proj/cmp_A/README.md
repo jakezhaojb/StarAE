@@ -12,4 +12,4 @@ Settings
     sgd_Nada: momentum=.0, adastep=0
     sgd_ada95: momentum=.95, adastep=1
     sgd_Nada95: momentum=.95, adastep=0
-    Sample: [8x8x40960]
+    Sample: [8x8x102400]

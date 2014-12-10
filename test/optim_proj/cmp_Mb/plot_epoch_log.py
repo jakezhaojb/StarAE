@@ -14,11 +14,11 @@ import visualize as vs
 
 
 def plot_weight():
-    weight_sgd_mb4096 = listdir_sort('/log/epoch/sgd_mb4096')
-    weight_sgd_mb1024 = listdir_sort('/log/epoch/sgd_mb1024')
-    weight_sgd_mb256 = listdir_sort('/log/epoch/sgd_mb256')
-    weight_sgd_mb64 = listdir_sort('/log/epoch/sgd_mb64')
-    weight_sgd_mb0 = listdir_sort('/log/epoch/sgd_mb0')
+    weight_sgd_mb4096 = listdir_sort('log/epoch/sgd_mb4096')
+    weight_sgd_mb1024 = listdir_sort('log/epoch/sgd_mb1024')
+    weight_sgd_mb256 = listdir_sort('log/epoch/sgd_mb256')
+    weight_sgd_mb64 = listdir_sort('log/epoch/sgd_mb64')
+    weight_sgd_mb0 = listdir_sort('log/epoch/sgd_mb0')
     
     for weight_file_elem in weight_sgd_mb4096:
         _weight_file_elem = 'log/epoch/sgd_mb4096/' + weight_file_elem
@@ -50,11 +50,11 @@ def plot_weight():
 
 
 def plot_loss():
-    loss_sgd_mb4096 = np.loadtxt('/log/epoch/sgd_mb4096.csv', delimiter=',')
-    loss_sgd_mb1024 = np.loadtxt('/log/epoch/sgd_mb1024.csv', delimiter=',')
-    loss_sgd_mb256 = np.loadtxt('/log/epoch/sgd_mb256.csv', delimiter=',')
-    loss_sgd_mb64 = np.loadtxt('/log/epoch/sgd_mb64.csv', delimiter=',')
-    loss_sgd_mb0 = np.loadtxt('/log/epoch/sgd_mb0.csv', delimiter=',')
+    loss_sgd_mb4096 = np.loadtxt('log/epoch/sgd_mb4096.csv', delimiter=',')
+    loss_sgd_mb1024 = np.loadtxt('log/epoch/sgd_mb1024.csv', delimiter=',')
+    loss_sgd_mb256 = np.loadtxt('log/epoch/sgd_mb256.csv', delimiter=',')
+    loss_sgd_mb64 = np.loadtxt('log/epoch/sgd_mb64.csv', delimiter=',')
+    loss_sgd_mb0 = np.loadtxt('log/epoch/sgd_mb0.csv', delimiter=',')
     plt.plot(range(len(loss_sgd_mb4096)), loss_sgd_mb4096, 'r', label='sgd_mb4096')
     plt.plot(range(len(loss_sgd_mb1024)), loss_sgd_mb1024, 'g', label='sgd_mb1024')
     plt.plot(range(len(loss_sgd_mb256)), loss_sgd_mb256, 'b', label='sgd_mb256')
@@ -64,7 +64,7 @@ def plot_loss():
     plt.legend(loc='best')
     plt.ylabel('loss function')
     plt.xlabel('epoch')
-    plt.savefig('/log/epoch/graph.png')
+    plt.savefig('log/epoch/graph.png')
     plt.clf()
 
 
@@ -81,8 +81,8 @@ def listdir_sort(path):
 
 def main():
     os.system('find . -name "*.png" | grep epoch | xargs rm')
-    plot_loss(id_elem)
-    # plot_weight(id_elem)
+    plot_loss()
+    # plot_weight()
 
 
 if __name__ == '__main__':

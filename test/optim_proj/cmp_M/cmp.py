@@ -15,36 +15,36 @@ def main():
     """test for Sparse AE"""
     os.system('rm -rf log')
     T = []
-    T1 = SparseAE(64, 49, optimize_method='sgd', max_iter=10,
-                  debug=0, verbose=True, tol=1e-8, mini_batch=64,
+    T1 = SparseAE(64, 49, optimize_method='sgd', max_iter=2,
+                  debug=0, verbose=True, tol=1e-8, mini_batch=256,
                   momentum=True, momen_beta=.99, alpha=.01, adastep=1,
                   logger='sgd99.csv')
-    T2 = SparseAE(64, 49, optimize_method='sgd', max_iter=10,
-                  debug=0, verbose=True, tol=1e-8, mini_batch=64,
+    T2 = SparseAE(64, 49, optimize_method='sgd', max_iter=2,
+                  debug=0, verbose=True, tol=1e-8, mini_batch=256,
                   momentum=True, momen_beta=.95, alpha=.01, adastep=1,
                   logger='sgd95.csv')
-    T3 = SparseAE(64, 49, optimize_method='sgd', max_iter=10,
-                  debug=0, verbose=True, tol=1e-8, mini_batch=64,
+    T3 = SparseAE(64, 49, optimize_method='sgd', max_iter=2,
+                  debug=0, verbose=True, tol=1e-8, mini_batch=256,
                   momentum=True, momen_beta=.90, alpha=.01, adastep=1,
                   logger='sgd90.csv')
-    T4 = SparseAE(64, 49, optimize_method='sgd', max_iter=10,
-                  debug=0, verbose=True, tol=1e-8, mini_batch=64,
+    T4 = SparseAE(64, 49, optimize_method='sgd', max_iter=2,
+                  debug=0, verbose=True, tol=1e-8, mini_batch=256,
                   momentum=True, momen_beta=.80, alpha=.01, adastep=1,
                   logger='sgd80.csv')
-    T5 = SparseAE(64, 49, optimize_method='sgd', max_iter=10,
-                  debug=0, verbose=True, tol=1e-8, mini_batch=64,
+    T5 = SparseAE(64, 49, optimize_method='sgd', max_iter=2,
+                  debug=0, verbose=True, tol=1e-8, mini_batch=256,
                   momentum=True, momen_beta=.60, alpha=.01, adastep=1,
                   logger='sgd60.csv')
-    T6 = SparseAE(64, 49, optimize_method='sgd', max_iter=10,
-                  debug=0, verbose=True, tol=1e-8, mini_batch=64,
+    T6 = SparseAE(64, 49, optimize_method='sgd', max_iter=2,
+                  debug=0, verbose=True, tol=1e-8, mini_batch=256,
                   momentum=True, momen_beta=.40, alpha=.01, adastep=1,
                   logger='sgd40.csv')
-    T7 = SparseAE(64, 49, optimize_method='sgd', max_iter=10,
-                  debug=0, verbose=True, tol=1e-8, mini_batch=64,
+    T7 = SparseAE(64, 49, optimize_method='sgd', max_iter=2,
+                  debug=0, verbose=True, tol=1e-8, mini_batch=256,
                   momentum=True, momen_beta=.20, alpha=.01, adastep=1,
                   logger='sgd20.csv')
-    T8 = SparseAE(64, 49, optimize_method='sgd', max_iter=10,
-                  debug=0, verbose=True, tol=1e-8, mini_batch=64,
+    T8 = SparseAE(64, 49, optimize_method='sgd', max_iter=2,
+                  debug=0, verbose=True, tol=1e-8, mini_batch=256,
                   momentum=False, momen_beta=0, alpha=.01, adastep=1,
                   logger='sgd0.csv')
     T.append(T1)
@@ -55,10 +55,13 @@ def main():
     T.append(T6)
     T.append(T7)
     T.append(T8)
-    X = vs.load_sample('IMAGES.mat', patch_size=8, n_patches=40960)
+    X = vs.load_sample('IMAGES25.mat', patch_size=8, n_patches=102400)
 
     for i in range(len(T)):
-        T[i].train(X)
+        try:
+            T[i].train(X)
+        except:
+            pass
 
 
 if __name__ == '__main__':

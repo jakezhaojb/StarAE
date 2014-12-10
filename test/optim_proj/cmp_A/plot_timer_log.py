@@ -14,10 +14,10 @@ import visualize as vs
 
 
 def plot_weight():
-    weight_sgd_ada = listdir_sort('/log/timer/sgd_ada')
-    weight_sgd_Nada = listdir_sort('/log/timer/sgd_Nada')
-    weight_sgd_ada95 = listdir_sort('/log/timer/sgd_ada95')
-    weight_sgd_Nada95 = listdir_sort('/log/timer/sgd_Nada95')
+    weight_sgd_ada = listdir_sort('log/timer/sgd_ada')
+    weight_sgd_Nada = listdir_sort('log/timer/sgd_Nada')
+    weight_sgd_ada95 = listdir_sort('log/timer/sgd_ada95')
+    weight_sgd_Nada95 = listdir_sort('log/timer/sgd_Nada95')
     
     for weight_file_elem in weight_sgd_ada:
         _weight_file_elem = 'log/timer/sgd_ada/' + weight_file_elem
@@ -44,19 +44,20 @@ def plot_weight():
 
 
 def plot_loss():
-    loss_sgd_ada = np.loadtxt('/log/timer/sgd_ada.csv', delimiter=',')
-    loss_sgd_Nada = np.loadtxt('/log/timer/sgd_Nada.csv', delimiter=',')
-    loss_sgd_ada95 = np.loadtxt('/log/timer/sgd_ada95.csv', delimiter=',')
-    loss_sgd_Nada95 = np.loadtxt('/log/timer/sgd_Nada95.csv', delimiter=',')
+    loss_sgd_ada = np.loadtxt('log/timer/sgd_ada.csv', delimiter=',')
+    loss_sgd_Nada = np.loadtxt('log/timer/sgd_Nada.csv', delimiter=',')
+    loss_sgd_ada95 = np.loadtxt('log/timer/sgd_ada95.csv', delimiter=',')
+    loss_sgd_Nada95 = np.loadtxt('log/timer/sgd_Nada95.csv', delimiter=',')
     plt.plot(loss_sgd_ada[:, 0], loss_sgd_ada[:, 1], 'r', label='sgd_ada')
     plt.plot(loss_sgd_Nada[:, 0], loss_sgd_Nada[:, 1], 'g', label='sgd_Nada')
     plt.plot(loss_sgd_ada95[:, 0], loss_sgd_ada95[:, 1], 'b', label='sgd_ada95')
     plt.plot(loss_sgd_Nada95[:, 0], loss_sgd_Nada95[:, 1], 'y', label='sgd_Nada95')
     plt.xlim(0, 100)
+    plt.ylim(0, 20)
     plt.legend(loc='best')
     plt.ylabel('loss function')
     plt.xlabel('timer')
-    plt.savefig('/log/timer/graph.png')
+    plt.savefig('log/timer/graph.png')
     plt.clf()
 
 
@@ -73,8 +74,8 @@ def listdir_sort(path):
 
 def main():
     os.system('find . -name "*.png" | grep timer | xargs rm')
-    plot_loss(id_elem)
-    # plot_weight(id_elem)
+    plot_loss()
+    # plot_weight()
 
 
 if __name__ == '__main__':

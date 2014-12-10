@@ -92,7 +92,7 @@ def sigmoid(x):
     return y
 
 
-def rec_linear(x):
+def relu(x):
     """rectified function
 
     Parameters
@@ -134,7 +134,7 @@ def activate(X, function='sigmoid'):
     Input
 
     function : string, default = 'sigmoid'
-    The name of activation function: 'sigmoid', 'rec_linear' or 'tanh'.
+    The name of activation function: 'sigmoid', 'relu' or 'tanh'.
 
     Returns
     -------
@@ -144,8 +144,8 @@ def activate(X, function='sigmoid'):
     assert isinstance(X, np.ndarray)
     if function == 'sigmoid':
         return sigmoid(X)
-    elif function == 'rec_linear':
-        return rec_linear(X)
+    elif function == 'relu':
+        return relu(X)
     elif function == 'tanh':
         return tanh(X)
     else:
@@ -170,7 +170,7 @@ def sigmoid_grad(x):
     return g
 
 
-def rec_linear_grad(x):
+def relu_grad(x):
     """gradient of rectified linear function
 
     Parameters
@@ -212,7 +212,7 @@ def activate_grad(X, function='sigmoid'):
     Input
 
     function : string, default = 'sigmoid'
-    The name of activation function: 'sigmoid', 'rec_linear' or 'tanh'.
+    The name of activation function: 'sigmoid', 'relu' or 'tanh'.
 
     Returns
     -------
@@ -222,8 +222,8 @@ def activate_grad(X, function='sigmoid'):
     assert isinstance(X, np.ndarray)
     if function == 'sigmoid':
         return sigmoid_grad(X)
-    elif function == 'rec_linear':
-        return rec_linear_grad(X)
+    elif function == 'relu':
+        return relu_grad(X)
     elif function == 'tanh':
         return tanh_grad(X)
     else:

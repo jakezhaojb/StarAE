@@ -128,7 +128,7 @@ class SparseAE(AutoEncoder):
         # Start iterate
         self.feed_forward(X)
         rho_ = np.sum(self.a2, axis=1).reshape(self.a2.shape[0], 1)/X.shape[1]
-        sigma3 = -(self.a1 - self.a3) * (self.a3 * (1 - self.a3))
+        sigma3 = -(self.a1 - self.a3) * activate_grad(self.z3)
         if self.debug:  # Here is likely to incur Numerical issue
             import warnings
             warnings.filterwarnings('error')
@@ -139,7 +139,7 @@ class SparseAE(AutoEncoder):
         else:
             sparse_sigma = -(self.rho / rho_) + (1 - self.rho) / (1 - rho_)
         sigma2 = (np.dot(self.w2.T, sigma3) + self.sparse_beta * sparse_sigma)\
-            * (self.a2 * (1 - self.a2))
+            * activate_grad(self.z2)
         # Desired gradients
         w2_grad = np.dot(sigma3, self.a2.T)
         b2_grad = np.sum(sigma3, axis=1)

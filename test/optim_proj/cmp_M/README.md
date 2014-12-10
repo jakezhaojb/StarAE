@@ -16,4 +16,4 @@ Settings
     sgd40: momentum=.40
     sgd20: momentum=.20
     sgd0: momentum=.0
-    Sample: [8x8x40960]
+    Sample: [8x8x102400]
