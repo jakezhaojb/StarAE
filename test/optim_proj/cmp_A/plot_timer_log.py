@@ -52,7 +52,7 @@ def plot_loss(x_max, y_max):
     plt.plot(loss_sgd_Nada[:, 0], loss_sgd_Nada[:, 1], 'g', label='sgd_Nada')
     plt.plot(loss_sgd_ada95[:, 0], loss_sgd_ada95[:, 1], 'b', label='sgd_ada95')
     plt.plot(loss_sgd_Nada95[:, 0], loss_sgd_Nada95[:, 1], 'y', label='sgd_Nada95')
-    plt.xlim(0, x_max)
+    plt.xlim(10, x_max)
     plt.ylim(0, y_max)
     plt.legend(loc='best')
     plt.ylabel('loss function')
@@ -74,9 +74,10 @@ def listdir_sort(path):
 
 def main():
     os.system('find . -name "*.png" | grep timer | xargs rm')
-    plot_loss(200, 20)
-    plot_loss(100, 100)
-    plot_loss(200, 100)
+    plot_loss(200, 5)
+    plot_loss(50, 5)
+    plot_loss(100, 50)
+    plot_loss(200, 50)
     # plot_weight()
 
 

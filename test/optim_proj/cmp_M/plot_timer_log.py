@@ -84,7 +84,7 @@ def plot_loss(x_max, y_max):
     plt.plot(loss_sgd40[:, 0], loss_sgd40[:, 1], 'g*', label='sgd40')
     plt.plot(loss_sgd20[:, 0], loss_sgd20[:, 1], 'b*', label='sgd20')
     plt.plot(loss_sgd0[:, 0], loss_sgd0[:, 1], 'y*', label='sgd0')
-    plt.xlim(0, x_max)
+    plt.xlim(10, x_max)
     plt.ylim(0, y_max)
     plt.legend(loc='best')
     plt.ylabel('loss function')
@@ -108,6 +108,8 @@ def main():
     os.system('find . -name "*.png" | grep timer | xargs rm')
     plot_loss(100, 20)
     plot_loss(200, 100)
+    plot_loss(80, 5)
+    plot_loss(80, 10)
     # plot_weight()
 
 
