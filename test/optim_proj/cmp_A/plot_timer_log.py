@@ -43,7 +43,7 @@ def plot_weight():
     print 'weights plotting done.'
 
 
-def plot_loss():
+def plot_loss(x_max, y_max):
     loss_sgd_ada = np.loadtxt('log/timer/sgd_ada.csv', delimiter=',')
     loss_sgd_Nada = np.loadtxt('log/timer/sgd_Nada.csv', delimiter=',')
     loss_sgd_ada95 = np.loadtxt('log/timer/sgd_ada95.csv', delimiter=',')
@@ -52,12 +52,12 @@ def plot_loss():
     plt.plot(loss_sgd_Nada[:, 0], loss_sgd_Nada[:, 1], 'g', label='sgd_Nada')
     plt.plot(loss_sgd_ada95[:, 0], loss_sgd_ada95[:, 1], 'b', label='sgd_ada95')
     plt.plot(loss_sgd_Nada95[:, 0], loss_sgd_Nada95[:, 1], 'y', label='sgd_Nada95')
-    plt.xlim(0, 100)
-    plt.ylim(0, 20)
+    plt.xlim(0, x_max)
+    plt.ylim(0, y_max)
     plt.legend(loc='best')
     plt.ylabel('loss function')
     plt.xlabel('timer')
-    plt.savefig('log/timer/graph.png')
+    plt.savefig('log/timer/graph_x_'+str(x_max)+'_y_'+str(y_max)+'.png')
     plt.clf()
 
 
@@ -74,7 +74,9 @@ def listdir_sort(path):
 
 def main():
     os.system('find . -name "*.png" | grep timer | xargs rm')
-    plot_loss()
+    plot_loss(200, 20)
+    plot_loss(100, 100)
+    plot_loss(200, 100)
     # plot_weight()
 
 

@@ -67,7 +67,7 @@ def plot_weight():
     print 'weights plotting done.'
 
 
-def plot_loss(y_max):
+def plot_loss(x_max, y_max):
     loss_sgd99 = np.loadtxt('log/timer/sgd99.csv', delimiter=',')
     loss_sgd95 = np.loadtxt('log/timer/sgd95.csv', delimiter=',')
     loss_sgd90 = np.loadtxt('log/timer/sgd90.csv', delimiter=',')
@@ -84,12 +84,12 @@ def plot_loss(y_max):
     plt.plot(loss_sgd40[:, 0], loss_sgd40[:, 1], 'g*', label='sgd40')
     plt.plot(loss_sgd20[:, 0], loss_sgd20[:, 1], 'b*', label='sgd20')
     plt.plot(loss_sgd0[:, 0], loss_sgd0[:, 1], 'y*', label='sgd0')
-    plt.xlim(0, 100)
+    plt.xlim(0, x_max)
     plt.ylim(0, y_max)
     plt.legend(loc='best')
     plt.ylabel('loss function')
     plt.xlabel('timer')
-    plt.savefig('log/timer/graph'+str(y_max)+'.png')
+    plt.savefig('log/timer/graph_x_'+str(x_max)+'_y_'+str(y_max)+'.png')
     plt.clf()
 
 
@@ -106,8 +106,8 @@ def listdir_sort(path):
 
 def main():
     os.system('find . -name "*.png" | grep timer | xargs rm')
-    plot_loss(20)
-    plot_loss(100)
+    plot_loss(100, 20)
+    plot_loss(200, 100)
     # plot_weight()
 
 

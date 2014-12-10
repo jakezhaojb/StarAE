@@ -40,10 +40,14 @@ def main():
     T.append(T3)
     T.append(T4)
     T.append(T5)
-    X = vs.load_sample('IMAGES.mat', patch_size=8, n_patches=40960)
+    X = vs.load_sample('IMAGES25.mat', patch_size=8, n_patches=102400)
 
     for i in range(len(T)):
-        T[i].train(X)
+        try: 
+           T[i].train(X)
+        except:
+           pass
+    
 
 
 if __name__ == '__main__':

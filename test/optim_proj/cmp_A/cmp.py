@@ -35,7 +35,7 @@ def main():
     T.append(T2)
     T.append(T3)
     T.append(T4)
-    X = vs.load_sample('IMAGES25.mat', patch_size=8, n_patches=102400)
+    X = vs.load_sample('IMAGES.mat', patch_size=8, n_patches=40960)
 
     for i in range(len(T)):
         try:

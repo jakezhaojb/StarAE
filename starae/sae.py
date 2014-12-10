@@ -74,8 +74,8 @@ class SparseAE(AutoEncoder):
                                  np.linalg.norm(self.w2) ** 2)
         # TODO should be moved to optim module
         if self.verbose and not self.debug:  # TODO sooooo ugly..
-            print 'cost is: %f' % cost
             if time_flag:
+                print 'cost is: %f' % cost
                 # Timer logger.
                 if not os.path.isdir('log/timer'):
                     os.mkdir('log/timer')

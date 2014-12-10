@@ -97,7 +97,7 @@ def sgd(compute_cost, init_guess, X, compute_grad, args=(),
         # inner-loop
         for iloop in mini_batch_idx:
             _args = (theta, X, 0, 1, ) + args
-            compute_cost(*_args)  # inner_cost
+            cost = compute_cost(*_args)  # inner_cost
             _args = (theta, X[:, iloop], ) + args
             iter_grad = compute_grad(*_args)
             # adastep
@@ -110,11 +110,17 @@ def sgd(compute_cost, init_guess, X, compute_grad, args=(),
                 step_size = copy(alpha)
             # momentum
             if momentum:
-                momen = beta * momen - iter_grad
+                # momen = beta * momen - iter_grad
+                momen = beta * momen - step_size * iter_grad
             else:
-                momen = -iter_grad
+                momen = -step_size * iter_grad
             # go downhill
-            theta += momen * step_size
+            theta += momen
+            # Backtracking  TODO ugly
+            _args = (theta, X, 0, 0, ) + args
+            cost_ = compute_cost(*_args)  # inner_cost
+            if cost_ > cost:
+                theta = theta - momen - step_size * iter_grad
         # check tolerance
         if linalg.norm(iter_grad) < tol:  # TODO some better criterion?
             break

@@ -35,19 +35,19 @@ def plot_weight(num):
     print 'weights plotting done.'
 
 
-def plot_loss(num, y_max):
+def plot_loss(num, x_max, y_max):
     loss_bfgs = np.loadtxt('cmp'+str(num)+'/log/timer/bfgs.csv', delimiter=',')
     loss_cg = np.loadtxt('cmp'+str(num)+'/log/timer/cg.csv', delimiter=',')
     loss_sgd = np.loadtxt('cmp'+str(num)+'/log/timer/sgd.csv', delimiter=',')
     plt.plot(loss_bfgs[:, 0], loss_bfgs[:, 1], 'r', label='bfgs')
     plt.plot(loss_cg[:, 0], loss_cg[:, 1], 'g', label='cg')
     plt.plot(loss_sgd[:, 0], loss_sgd[:, 1], 'b*', label='sgd')
-    plt.xlim(0, 100)
+    plt.xlim(0, x_max)
     plt.ylim(0, y_max)
     plt.legend(loc='best')
     plt.ylabel('loss function')
     plt.xlabel('timer')
-    plt.savefig('cmp'+str(num)+'/log/timer/graph'+str(y_max)+'.png')
+    plt.savefig('cmp'+str(num)+'/log/timer/graph_x_'+str(x_max)+'_y_'+str(y_max)+'.png')
     plt.clf()
 
 
@@ -66,8 +66,10 @@ def main():
     os.system('find . -name "*.png" | grep timer | xargs rm')
     id = range(1, 7)
     for id_elem in id:
-        plot_loss(id_elem, 20)
-        plot_loss(id_elem, 100)
+        plot_loss(id_elem, 20, 20)
+        plot_loss(id_elem, 50, 20)
+        plot_loss(id_elem, 100, 100)
+        plot_loss(id_elem, 180, 100)
         # plot_weight(id_elem)
 
 

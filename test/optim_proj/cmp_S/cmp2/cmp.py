@@ -32,7 +32,10 @@ def main():
 
     name = ['bfgs.png', 'cg.png', 'sgd.png']
     for i in range(3):
-        T[i].train(X)
+        try:
+            T[i].train(X)
+        except:
+            pass
         T[i].devec_theta()
         vs.disp_effect(T[i].w1, fname=name[i])
 
