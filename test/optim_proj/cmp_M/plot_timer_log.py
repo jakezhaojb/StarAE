@@ -84,7 +84,7 @@ def plot_loss(x_max, y_max):
     plt.plot(loss_sgd40[:, 0], loss_sgd40[:, 1], 'g*', label='sgd40')
     plt.plot(loss_sgd20[:, 0], loss_sgd20[:, 1], 'b*', label='sgd20')
     plt.plot(loss_sgd0[:, 0], loss_sgd0[:, 1], 'y*', label='sgd0')
-    plt.xlim(10, x_max)
+    plt.xlim(0, x_max)
     plt.ylim(0, y_max)
     plt.legend(loc='best')
     plt.ylabel('loss function')

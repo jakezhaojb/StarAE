@@ -42,7 +42,7 @@ def plot_loss(num, x_max, y_max):
     plt.plot(loss_bfgs[:, 0], loss_bfgs[:, 1], 'r', label='bfgs')
     plt.plot(loss_cg[:, 0], loss_cg[:, 1], 'g', label='cg')
     plt.plot(loss_sgd[:, 0], loss_sgd[:, 1], 'b*', label='sgd')
-    plt.xlim(5, x_max)
+    plt.xlim(0, x_max)
     plt.ylim(0, y_max)
     plt.legend(loc='best')
     plt.ylabel('loss function')
