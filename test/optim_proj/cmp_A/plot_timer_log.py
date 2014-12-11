@@ -52,7 +52,7 @@ def plot_loss(x_max, y_max):
     plt.plot(loss_sgd_Nada[:, 0], loss_sgd_Nada[:, 1], 'g', label='sgd_Nada')
     plt.plot(loss_sgd_ada95[:, 0], loss_sgd_ada95[:, 1], 'b', label='sgd_ada95')
     plt.plot(loss_sgd_Nada95[:, 0], loss_sgd_Nada95[:, 1], 'y', label='sgd_Nada95')
-    plt.xlim(10, x_max)
+    plt.xlim(4, x_max)
     plt.ylim(0, y_max)
     plt.legend(loc='best')
     plt.ylabel('loss function')
