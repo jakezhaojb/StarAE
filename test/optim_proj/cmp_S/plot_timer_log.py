@@ -77,6 +77,10 @@ def main():
         plot_loss(id_elem, 100, 20)
         plot_loss(id_elem, 100, 100)
         plot_loss(id_elem, 180, 100)
+        plot_loss(id_elem, 240, 20)
+        plot_loss(id_elem, 320, 20)
+        plot_loss(id_elem, 480, 20)
+        plot_loss(id_elem, 600, 20)
         # plot_weight(id_elem)
 
 
