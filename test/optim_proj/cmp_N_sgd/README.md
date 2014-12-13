@@ -1,9 +1,9 @@
-Comparison Numerical tests for BFGS
+Comparison Numerical tests for SGD
 ===
 
 Introduction
 ---
-This folder is mainly testing Numerical issues in Neural Nets optimizing, by BFGS.
+This folder is mainly testing Numerical issues in Neural Nets optimizing, by SGD.
 
 Settings
 ---

@@ -13,4 +13,4 @@ Settings
     sgd_mb256: mini_batch=256
     sgd_mb64: mini_batch=64
     sgd_mb0: mini_batch=0
-    Sample: [8x8x40960]
+    Sample: [8x8x102400]

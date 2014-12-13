@@ -19,3 +19,6 @@ visualize/data/*mat
 
 # 
 test/optim_proj/cmp*/*/*.png
+
+#
+*tex
