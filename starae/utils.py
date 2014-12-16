@@ -199,7 +199,7 @@ def tanh_grad(x):
     g : np.array, shape = x.shape
     """
     assert isinstance(x, np.ndarray)
-    g = 1 - np.power(tanh(x))
+    g = 1 - np.power(tanh(x), 2)
     return g
 
 
